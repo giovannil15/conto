@@ -36,7 +36,6 @@ public class BankingAdapter {
 	public SaldoDTO saldo(String accountId) {
 		try {
 	    	String url = String.format("%s/api/gbs/banking/v4.0/accounts/%s/balance",domain,accountId.toString());
-	    	url = "https://asdfasdfbelamadonninaziochen";
 	    	HttpEntity<String> entity = new HttpEntity<>("parameters", getHeaders());
 	    	RestTemplate restTemplate = new RestTemplate();
 	    	ResponseEntity<SaldoResponse> respEntity = restTemplate.exchange(url, HttpMethod.GET, entity, SaldoResponse.class);
@@ -56,7 +55,6 @@ public class BankingAdapter {
 		try {
 			String url = String.format("%s/api/gbs/banking/v4.0/accounts/%s/payments/money-transfers", domain,
 					request.getAccountId().toString());
-	    	url = "https://asdfasdfbelamadonninaziochen";
 			HttpEntity<BonificoRequestDTO> entity = new HttpEntity<>(request, getHeaders());
 	    	RestTemplate restTemplate = new RestTemplate();
 	    	ResponseEntity<BonificoResponse> respEntity = restTemplate.exchange(url, HttpMethod.POST, entity, BonificoResponse.class);
@@ -76,7 +74,6 @@ public class BankingAdapter {
 		try {
 	    	String url = String.format("%s/api/gbs/banking/v4.0/accounts/%s/transactions?fromAccountingDate=%s&toAccountingDate=%s",
 	    			domain,accountId.toString(),dataInizio.toString(), dataFine.toString());
-	    	url = "";
 	    	HttpEntity<String> entity = new HttpEntity<>("parameters", getHeaders());
 	    	RestTemplate restTemplate = new RestTemplate();
 	    	ResponseEntity<TransazioniResponse> respEntity = restTemplate.exchange(url, HttpMethod.GET, entity, TransazioniResponse.class);
