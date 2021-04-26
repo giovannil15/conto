@@ -66,5 +66,13 @@ public class TransazioneDTO {
 		this.description = description;
 	}
 	
+	@Override
+	public String toString() {
+		return "TransazioneDTO [transactionId=" + transactionId + ", operationId=" + operationId + ", accountingDate="
+				+ accountingDate + ", valueDate=" + valueDate + ", amount=" + amount + ", currency=" + currency
+				+ ", type=" + type + ", description=" + description + "]";
+	}
+	
+	
 	
 }

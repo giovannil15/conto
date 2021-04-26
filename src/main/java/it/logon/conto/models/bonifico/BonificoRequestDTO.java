@@ -1,6 +1,9 @@
-package it.logon.conto.models;
+package it.logon.conto.models.bonifico;
 
-public class BonificoRequestDTO {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class BonificoRequestDTO implements Serializable {
 	
 	private Long accountId;
 	private String receiverName;
@@ -9,6 +12,20 @@ public class BonificoRequestDTO {
 	private String amount;
 	private String executionDate; // YYYY-MM-DD
 	
+	public BonificoRequestDTO() {
+	}
+	
+	
+	public BonificoRequestDTO(Long accountId, String receiverName, String description, String currency, String amount,
+			String executionDate) {
+		this.accountId = accountId;
+		this.receiverName = receiverName;
+		this.description = description;
+		this.currency = currency;
+		this.amount = amount;
+		this.executionDate = executionDate;
+	}
+
 	public Long getAccountId() {
 		return accountId;
 	}
@@ -44,9 +61,7 @@ public class BonificoRequestDTO {
 	}
 	public void setExecutionDate(String executionDate) {
 		this.executionDate = executionDate;
-	}
-	
-	
+	}	
 	
 	
 }

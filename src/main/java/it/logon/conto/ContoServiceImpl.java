@@ -4,49 +4,69 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import it.logon.conto.adapter.BankingAdapter;
 import it.logon.conto.dao.StoricoRepository;
 import it.logon.conto.dao.TransazioneEntity;
 import it.logon.conto.exception.ApiCustomError;
-import it.logon.conto.models.BonificoRequestDTO;
+import it.logon.conto.exception.ApiGenericError;
+import it.logon.conto.exception.ApiHttpStatusError;
+import it.logon.conto.models.bonifico.BonificoRequestDTO;
+import it.logon.conto.models.saldo.SaldoDTO;
 import it.logon.conto.models.transazioni.TransazioneDTO;
 
+@Service
 public class ContoServiceImpl implements ContoService {
 	
-	private final BankingAdapter adapter = new BankingAdapter();
-	private final StoricoRepository storicoRepository;
+	@Autowired
+	private BankingAdapter bankingAdapter;
 	
-	public ContoServiceImpl(StoricoRepository repository) {
+	@Autowired
+	private StoricoRepository storicoRepository;
+	
+	@Autowired
+	public ContoServiceImpl(StoricoRepository repository, BankingAdapter adapter) {
 		storicoRepository = repository;
+		bankingAdapter = adapter;
+	}
+	
+	public ContoServiceImpl() {
+		
 	}
 	
 	@Override
-	public double saldo(String accountId) {
+	public SaldoDTO saldo(String accountId) {
 		try {
-			return adapter.saldo(accountId);
-		}
-		catch (Exception e) {
+			return bankingAdapter.saldo(accountId);
+		} catch(ApiGenericError e) {
+			throw new ApiGenericError(e.getMessage());
+		} catch(ApiHttpStatusError e) {
+			throw new ApiHttpStatusError(e.getMessage());
+		} catch (Exception e) {
 			throw e;
 		}
 	}
 
 	@Override
-	public String bonifico(BonificoRequestDTO request) throws ApiCustomError {
+	public String bonifico(BonificoRequestDTO request) {
 		try {
-			return adapter.bonifico(request);
-		}
-		catch (Exception e) {
+			return bankingAdapter.bonifico(request);
+		}catch (ApiCustomError e) {
 			throw new ApiCustomError(request.getAccountId().toString());
-		}
+		} catch(ApiHttpStatusError e) {
+			throw new ApiHttpStatusError(e.getMessage());
+		}catch (Exception e) {
+			throw e;
+		}		
 	}
 
 	@Override
 	public List<TransazioneDTO> transazioni(String accountId, LocalDate dataInizio, LocalDate dataFine) {
 		try {
-			List<TransazioneDTO> transazioni = adapter.transazioni(accountId, dataInizio, dataFine);
-			
+			List<TransazioneDTO> transazioni = bankingAdapter.transazioni(accountId, dataInizio, dataFine);
+
 			transazioni.stream().forEach(t -> 
 			{
 				Long id = Long.valueOf(t.getTransactionId());
@@ -64,8 +84,11 @@ public class ContoServiceImpl implements ContoService {
 			});
 						
 			return transazioni;
-		}
-		catch (Exception e) {
+		} catch(ApiGenericError e) {
+			throw new ApiGenericError(e.getMessage());
+		} catch(ApiHttpStatusError e) {
+			throw new ApiHttpStatusError(e.getMessage());
+		} catch (Exception e) {
 			throw e;
 		}
 	}

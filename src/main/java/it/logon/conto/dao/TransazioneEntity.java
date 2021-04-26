@@ -1,9 +1,6 @@
 package it.logon.conto.dao;
 
-import java.time.LocalDate;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 

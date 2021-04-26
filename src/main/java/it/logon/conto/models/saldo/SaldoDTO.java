@@ -37,6 +37,12 @@ public class SaldoDTO {
 	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
+	@Override
+	public String toString() {
+		return "SaldoDTO [date=" + date + ", balance=" + balance + ", availableBalance=" + availableBalance
+				+ ", currency=" + currency + "]";
+	}
 
+	
 	
 }

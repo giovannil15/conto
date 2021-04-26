@@ -21,5 +21,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			
     	return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+	
+	@ExceptionHandler(value = {ApiGenericError.class})
+    public ResponseEntity<Object> handleApiGenericError(
+    		ApiGenericError ex, WebRequest request) {
+		
+		String code = "API999";
+		String description = String.format("Errore generico durante la chiamata al servizio esterno: %s", ex.getMessage());
+		ErrorMessage errorMessage = new ErrorMessage(code, description);
+			
+    	return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+	
+	@ExceptionHandler(value = {ApiHttpStatusError.class})
+    public ResponseEntity<Object> handleHttpStatusError(
+    		ApiHttpStatusError ex, WebRequest request) {
+		
+		String code = "APISTATUS";
+		String description = String.format("Errore durante la chiamata al servizio esterno %s", ex.getMessage());
+		ErrorMessage errorMessage = new ErrorMessage(code, description);
+			
+    	return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 }
